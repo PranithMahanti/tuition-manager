@@ -248,7 +248,7 @@ def build_pdf_report(payload: dict, filepath: str) -> None:
     # Performance Summary
     story.extend(_section_header("Performance Summary", sty))
     an = payload["analytics"]
-    trend_icon = {"improving": "📈", "declining": "📉", "stable": "➡️", "no data": "—"}.get(
+    trend_icon = {"improving": "Improving", "declining": "Declining", "stable": "Stable", "no data": "—"}.get(
         an["trend"], "—"
     )
     summary_data = [

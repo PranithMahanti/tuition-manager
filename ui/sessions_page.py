@@ -14,7 +14,7 @@ from services.lesson_service import log_lesson, get_unlogged_sessions
 
 
 def render():
-    st.title("📖 Sessions & Lesson Log")
+    st.title("Sessions & Lesson Log")
 
     students = get_all_students()
     if not students:
@@ -24,10 +24,10 @@ def render():
     student_options = {f"{s.name} – {s.subject} (ID {s.id})": s for s in students}
 
     tab_view, tab_log, tab_add = st.tabs(
-        ["📋 View Sessions", "✏️ Log Lesson", "➕ Manual Session"]
+        ["View Sessions", "Log Lesson", "Manual Session"]
     )
 
-    # ── VIEW ───────────────────────────────────────────────────────────────────
+    # VIEW
     with tab_view:
         st.subheader("Session History")
         c1, c2, c3 = st.columns([2, 1, 1])
@@ -62,7 +62,7 @@ def render():
                         f"{s.start_time.strftime('%I:%M %p')}"
                         if s.start_time else "—"
                     ),
-                    "Attended": "✅" if s.is_attended else "❌",
+                    "Attended": "Attended" if s.is_attended else "Nope.",
                     "Topic": s.topic_taught or "—",
                     "Homework": s.homework or "—",
                     "Remarks": s.remarks or "—",
@@ -72,7 +72,7 @@ def render():
             df = pd.DataFrame(rows)
             st.dataframe(df, hide_index=True, use_container_width=True)
 
-            with st.expander("🗑️ Delete a Session"):
+            with st.expander("Delete a Session"):
                 del_id = st.number_input("Session ID to delete", min_value=1, step=1, key="del_s")
                 if st.button("Delete Session", type="secondary", key="del_s_btn"):
                     if delete_session(int(del_id)):
@@ -87,7 +87,7 @@ def render():
                 "Generate sessions from the Schedule page."
             )
 
-    # ── LOG LESSON ─────────────────────────────────────────────────────────────
+    # LOG LESSON
     with tab_log:
         st.subheader("Log Lesson Content into a Session")
 
@@ -103,7 +103,7 @@ def render():
 
         if not pool:
             st.info("No sessions available to log." if mode == "All sessions"
-                    else "All sessions are already logged! 🎉")
+                    else "All sessions are already logged!")
         else:
             sess_opts = {
                 f"[{s.id}] {s.session_date.strftime('%d %b %Y')} "
@@ -137,7 +137,7 @@ def render():
                     placeholder="e.g. Student struggled with sign changes. Needs extra practice.",
                     height=60,
                 )
-                submitted = st.form_submit_button("💾 Save Lesson Log", use_container_width=True)
+                submitted = st.form_submit_button("Save Lesson Log", use_container_width=True)
                 if submitted:
                     if not topic.strip():
                         st.error("Topic Taught is required.")
@@ -149,10 +149,10 @@ def render():
                             remarks=remarks,
                             is_attended=attended,
                         )
-                        st.success("✅ Lesson log saved!")
+                        st.success("Lesson log saved!")
                         st.rerun()
 
-    # ── MANUAL SESSION ─────────────────────────────────────────────────────────
+    # MANUAL SESSION
     with tab_add:
         st.subheader("Add a Manual (Ad-hoc) Session")
         st.caption("Use this for makeup classes or sessions outside the regular schedule.")
@@ -171,7 +171,7 @@ def render():
             remarks = st.text_area("Remarks", placeholder="Optional")
             attended = st.checkbox("Student attended", value=True)
 
-            if st.form_submit_button("➕ Add Session", use_container_width=True):
+            if st.form_submit_button("Add Session", use_container_width=True):
                 create_session(
                     student_id=student3.id,
                     session_date=sess_date,
@@ -183,7 +183,7 @@ def render():
                     is_attended=attended,
                 )
                 st.success(
-                    f"✅ Manual session added for **{student3.name}** on "
+                    f"Manual session added for **{student3.name}** on "
                     f"{sess_date.strftime('%d %b %Y')}."
                 )
                 st.rerun()

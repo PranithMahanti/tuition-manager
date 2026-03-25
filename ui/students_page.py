@@ -12,15 +12,15 @@ from services.student_service import (
 
 
 def render():
-    st.title("👨‍🎓 Students")
+    st.title("Students")
 
-    tab_list, tab_add, tab_edit = st.tabs(["📋 All Students", "➕ Add Student", "✏️ Edit / Deactivate"])
+    tab_list, tab_add, tab_edit = st.tabs(["All Students", "Add Student", "Edit / Deactivate"])
 
-    # ── LIST ───────────────────────────────────────────────────────────────────
+    # LIST
     with tab_list:
         students = get_all_students(active_only=False)
         if not students:
-            st.info("No students yet. Use the '➕ Add Student' tab to get started.")
+            st.info("No students yet. Use the 'Add Student' tab to get started.")
         else:
             rows = [
                 {
@@ -32,13 +32,13 @@ def render():
                     "Phone": s.parent_phone or "—",
                     "Joined": s.join_date.strftime("%d %b %Y") if s.join_date else "—",
                     "Classes/Mo": s.monthly_class_count,
-                    "Active": "✅" if s.is_active else "❌",
+                    "Active": "Active" if s.is_active else "Inactive",
                 }
                 for s in students
             ]
             df = pd.DataFrame(rows)
 
-            search = st.text_input("🔍 Search by name or subject", "")
+            search = st.text_input("Search by name or subject", "")
             if search:
                 mask = df["Name"].str.contains(search, case=False) | \
                        df["Subject"].str.contains(search, case=False)
@@ -47,7 +47,7 @@ def render():
             st.dataframe(df, hide_index=True, use_container_width=True)
             st.caption(f"Showing {len(df)} student(s).")
 
-    # ── ADD ────────────────────────────────────────────────────────────────────
+    # ADD
     with tab_add:
         st.subheader("Add New Student")
         with st.form("add_student_form", clear_on_submit=True):
@@ -64,7 +64,7 @@ def render():
             parent_phone = p2.text_input("Phone Number")
             parent_email = p3.text_input("Email Address")
 
-            submitted = st.form_submit_button("✅ Add Student", use_container_width=True)
+            submitted = st.form_submit_button("Add Student", use_container_width=True)
             if submitted:
                 if not name.strip() or not subject.strip() or not grade.strip():
                     st.error("Name, Subject, and Grade are required.")
@@ -79,15 +79,15 @@ def render():
                         join_date=join_date,
                         monthly_class_count=int(monthly),
                     )
-                    st.success(f"✅ Student **{s.name}** added successfully (ID: {s.id})!")
+                    st.success(f"Student **{s.name}** added successfully (ID: {s.id})!")
                     st.rerun()
 
-    # ── EDIT / DEACTIVATE ──────────────────────────────────────────────────────
+    # EDIT / DEACTIVATE
     with tab_edit:
         st.subheader("Edit or Deactivate a Student")
         all_students = get_all_students(active_only=False)
         if not all_students:
-            st.info("No students found. Add one in the '➕ Add Student' tab.")
+            st.info("No students found. Add one in the 'Add Student' tab.")
         else:
             options = {f"{s.name} (ID {s.id}) – {s.subject}": s.id for s in all_students}
             chosen_label = st.selectbox("Select Student", list(options.keys()))
@@ -110,9 +110,9 @@ def render():
                     parent_email = p3.text_input("Email", value=student.parent_email or "")
 
                     save, deact = st.columns(2)
-                    save_btn = save.form_submit_button("💾 Save Changes", use_container_width=True)
+                    save_btn = save.form_submit_button("Save Changes", use_container_width=True)
                     deact_btn = deact.form_submit_button(
-                        "🚫 Deactivate Student",
+                        "Deactivate Student",
                         use_container_width=True,
                         type="secondary",
                     )
@@ -128,7 +128,7 @@ def render():
                             parent_email=parent_email.strip(),
                             monthly_class_count=int(monthly),
                         )
-                        st.success("✅ Student updated!")
+                        st.success("Student updated!")
                         st.rerun()
 
                     if deact_btn:
