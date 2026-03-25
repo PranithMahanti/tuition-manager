@@ -116,7 +116,7 @@ def render():
             ]
             df = pd.DataFrame(rows)
             st.dataframe(
-                df.style.background_gradient(subset=["%"], cmap="RdYlGn", vmin=0, vmax=100),
+                df.style.applymap(lambda v: "background-color:#DCFCE7;color:#14532D" if isinstance(v,float) and v>=75 else ("background-color:#FEF9C3;color:#713F12" if isinstance(v,float) and v>=50 else "background-color:#FEE2E2;color:#7F1D1D") if isinstance(v,float) else "", subset=["%"]),
                 hide_index=True,
                 use_container_width=True,
             )
