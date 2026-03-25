@@ -1,3 +1,3 @@
 /venv
-*.pdf
-/__pycache__
+/reports/*.pdf
+/services/__pycache__

@@ -17,25 +17,25 @@ def render():
     st.title("📊 Dashboard")
     st.caption(f"Today is **{today.strftime('%A, %d %B %Y')}**")
 
-    # ── Top KPI cards ──────────────────────────────────────────────────────────
+    # Top KPI Cards
     students = get_all_students()
     todays_sessions = get_sessions_for_date(today)
     upcoming = get_upcoming_sessions(days_ahead=7)
     recent_tests = get_all_tests(limit=20)
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("👨‍🎓 Active Students", len(students))
-    k2.metric("📅 Classes Today", len(todays_sessions))
-    k3.metric("🔮 Upcoming (7d)", len(upcoming))
-    k4.metric("📝 Total Tests Logged", len(recent_tests))
+    k1.metric("Active Students", len(students))
+    k2.metric("Classes Today", len(todays_sessions))
+    k3.metric("Upcoming (7d)", len(upcoming))
+    k4.metric("Total Tests Logged", len(recent_tests))
 
     st.divider()
 
-    # ── Today's Classes ────────────────────────────────────────────────────────
+    # Classes Today
     col_left, col_right = st.columns([1, 1])
 
     with col_left:
-        st.subheader("🗓️ Today's Classes")
+        st.subheader("Today's Classes")
         if todays_sessions:
             for s in todays_sessions:
                 time_str = (
@@ -43,13 +43,13 @@ def render():
                     if s.start_time and s.end_time
                     else "Time not set"
                 )
-                status = "✅" if s.is_attended else "❌"
-                logged = "📝" if s.topic_taught else "⏳"
+                status = "Yes" if s.is_attended else "No"
+                logged = "Taught" if s.topic_taught else "Pending"
                 st.markdown(
                     f"""<div style='padding:10px;border-left:4px solid #6366F1;
                     background:#EEF2FF;border-radius:6px;margin-bottom:8px'>
                     <b>{status} {s.student.name}</b> — {s.student.subject}<br>
-                    <small>🕐 {time_str} &nbsp; {logged} {'Logged' if s.topic_taught else 'Not logged yet'}</small>
+                    <small>Time: {time_str} &nbsp; {logged} {'Logged' if s.topic_taught else 'Not logged yet'}</small>
                     </div>""",
                     unsafe_allow_html=True,
                 )
@@ -57,7 +57,7 @@ def render():
             st.info("No classes scheduled for today.")
 
     with col_right:
-        st.subheader("🔮 Upcoming Classes")
+        st.subheader("Upcoming Classes")
         if upcoming:
             for s in upcoming[:8]:
                 days_away = (s.session_date - today).days
@@ -71,7 +71,7 @@ def render():
                     f"""<div style='padding:8px;border-left:4px solid #10B981;
                     background:#ECFDF5;border-radius:6px;margin-bottom:6px'>
                     <b>{s.student.name}</b> — {s.student.subject}<br>
-                    <small>📅 {s.session_date.strftime('%d %b')} ({label}) &nbsp; 🕐 {time_str}</small>
+                    <small>{s.session_date.strftime('%d %b')} ({label}) &nbsp; {time_str}</small>
                     </div>""",
                     unsafe_allow_html=True,
                 )
@@ -80,11 +80,11 @@ def render():
 
     st.divider()
 
-    # ── Recent Tests & Performance Chart ──────────────────────────────────────
+    # Recent Tests & Performance Chart
     col_a, col_b = st.columns([1.2, 0.8])
 
     with col_a:
-        st.subheader("📝 Recent Test Scores")
+        st.subheader("Recent Test Scores")
         if recent_tests:
             rows = []
             for t in recent_tests[:10]:
@@ -118,7 +118,7 @@ def render():
             st.info("No tests recorded yet.")
 
     with col_b:
-        st.subheader("📈 Score Distribution")
+        st.subheader("Score Distribution")
         if recent_tests:
             buckets = {"A+ (≥90)": 0, "A (80-89)": 0, "B (70-79)": 0,
                        "C (60-69)": 0, "D (50-59)": 0, "F (<50)": 0}
@@ -150,8 +150,8 @@ def render():
 
     st.divider()
 
-    # ── Alerts ─────────────────────────────────────────────────────────────────
-    st.subheader("⚠️ Alerts & Reminders")
+    # Alerts
+    st.subheader("Alerts & Reminders")
     alerts = []
 
     # Students with unlogged sessions

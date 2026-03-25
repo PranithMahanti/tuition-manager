@@ -9,7 +9,7 @@ from sqlalchemy.orm import joinedload
 from database.models import Test
 
 
-# ── Create ─────────────────────────────────────────────────────────────────────
+# Create
 def create_test(
     student_id: int,
     date: datetime.date,
@@ -35,7 +35,7 @@ def create_test(
         return test
 
 
-# ── Read ───────────────────────────────────────────────────────────────────────
+# Read
 def get_tests_for_student(
     student_id: int,
     year: Optional[int] = None,
@@ -73,7 +73,7 @@ def get_test_by_id(test_id: int) -> Optional[Test]:
         db.close()
 
 
-# ── Update / Delete ────────────────────────────────────────────────────────────
+# Update / Delete
 def update_test(test_id: int, **kwargs) -> Optional[Test]:
     with db_session() as db:
         test = db.query(Test).filter(Test.id == test_id).first()
@@ -96,7 +96,7 @@ def delete_test(test_id: int) -> bool:
         return True
 
 
-# ── Analytics ──────────────────────────────────────────────────────────────────
+# Analytics
 def get_test_analytics(student_id: int) -> dict:
     """Return summary analytics for a student across all tests."""
     tests = get_tests_for_student(student_id)

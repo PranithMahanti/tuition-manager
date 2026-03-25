@@ -8,7 +8,7 @@ from database.models import Schedule
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 
-# ── Create ─────────────────────────────────────────────────────────────────────
+# CREATE
 def create_schedule(
     student_id: int,
     day_of_week: int,
@@ -28,7 +28,7 @@ def create_schedule(
         return schedule
 
 
-# ── Read ───────────────────────────────────────────────────────────────────────
+# READ
 def get_schedules_for_student(student_id: int) -> List[Schedule]:
     db = get_db()
     try:
@@ -76,7 +76,7 @@ def get_schedule_by_id(schedule_id: int) -> Optional[Schedule]:
         db.close()
 
 
-# ── Update ─────────────────────────────────────────────────────────────────────
+# UPDATE
 def update_schedule(schedule_id: int, **kwargs) -> Optional[Schedule]:
     with db_session() as db:
         schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
@@ -90,7 +90,7 @@ def update_schedule(schedule_id: int, **kwargs) -> Optional[Schedule]:
         return schedule
 
 
-# ── Delete ─────────────────────────────────────────────────────────────────────
+# DELETE
 def delete_schedule(schedule_id: int) -> bool:
     with db_session() as db:
         schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
@@ -100,6 +100,6 @@ def delete_schedule(schedule_id: int) -> bool:
         return True
 
 
-# ── Utilities ──────────────────────────────────────────────────────────────────
+# UTILITIES
 def day_name(day_index: int) -> str:
     return DAYS[day_index] if 0 <= day_index <= 6 else "Unknown"

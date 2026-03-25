@@ -8,7 +8,7 @@ from database.db import db_session, get_db
 from database.models import ClassSession, Schedule, Student
 
 
-# ── Auto-generation ────────────────────────────────────────────────────────────
+# Auto-gen
 def generate_monthly_sessions(
     student_id: int, year: int, month: int
 ) -> Tuple[int, int]:
@@ -77,7 +77,7 @@ def generate_sessions_for_all_students(year: int, month: int) -> dict:
         db.close()
 
 
-# ── CRUD ───────────────────────────────────────────────────────────────────────
+# CRUD
 def create_session(
     student_id: int,
     session_date: datetime.date,
@@ -197,7 +197,7 @@ def delete_session(session_id: int) -> bool:
         return True
 
 
-# ── Stats ──────────────────────────────────────────────────────────────────────
+# Stats
 def get_attendance_stats(
     student_id: int, year: int, month: int
 ) -> dict:

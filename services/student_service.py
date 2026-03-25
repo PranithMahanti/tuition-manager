@@ -5,7 +5,7 @@ from database.db import db_session, get_db
 from database.models import Student
 
 
-# ── Create ─────────────────────────────────────────────────────────────────────
+# Create
 def create_student(
     name: str,
     class_grade: str,
@@ -34,7 +34,7 @@ def create_student(
         return student
 
 
-# ── Read ───────────────────────────────────────────────────────────────────────
+# Read
 def get_all_students(active_only: bool = True) -> List[Student]:
     db = get_db()
     try:
@@ -70,7 +70,7 @@ def search_students(query: str) -> List[Student]:
         db.close()
 
 
-# ── Update ─────────────────────────────────────────────────────────────────────
+# Update
 def update_student(student_id: int, **kwargs) -> Optional[Student]:
     with db_session() as db:
         student = db.query(Student).filter(Student.id == student_id).first()
@@ -84,7 +84,7 @@ def update_student(student_id: int, **kwargs) -> Optional[Student]:
         return student
 
 
-# ── Deactivate / Delete ────────────────────────────────────────────────────────
+# Deactivate/ Delete
 def deactivate_student(student_id: int) -> bool:
     with db_session() as db:
         student = db.query(Student).filter(Student.id == student_id).first()
@@ -103,7 +103,7 @@ def delete_student(student_id: int) -> bool:
         return True
 
 
-# ── Stats ──────────────────────────────────────────────────────────────────────
+# Stats
 def get_student_count() -> int:
     db = get_db()
     try:

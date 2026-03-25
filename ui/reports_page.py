@@ -18,7 +18,7 @@ MONTH_NAMES = [
 
 
 def render():
-    st.title("📄 Monthly Reports")
+    st.title("Monthly Reports")
 
     students = get_all_students()
     if not students:
@@ -28,10 +28,10 @@ def render():
     student_options = {f"{s.name} – {s.subject} (ID {s.id})": s for s in students}
 
     tab_gen, tab_prev, tab_hist = st.tabs(
-        ["🛠️ Generate Report", "👁️ Preview Data", "📁 Report History"]
+        ["Generate Report", "Preview Data", "Report History"]
     )
 
-    # ── GENERATE ───────────────────────────────────────────────────────────────
+    # GENERATE
     with tab_gen:
         st.subheader("Generate Monthly PDF Report")
 
@@ -71,12 +71,12 @@ def render():
 
         if att["total"] == 0 and ts["count"] == 0:
             st.warning(
-                f"⚠️ No sessions or tests found for "
+                f"No sessions or tests found for "
                 f"{MONTH_NAMES[int(month)]} {int(year)}. "
                 "The report will be generated but will have minimal data."
             )
 
-        if st.button("📄 Generate PDF Report", type="primary", use_container_width=True):
+        if st.button("Generate PDF Report", type="primary", use_container_width=True):
             with st.spinner("Building PDF report…"):
                 path = generate_monthly_report(
                     student_id=student.id,
@@ -85,10 +85,10 @@ def render():
                     teacher_comments=teacher_comments,
                 )
             if path:
-                st.success(f"✅ Report generated: `{os.path.basename(path)}`")
+                st.success(f"Report generated: `{os.path.basename(path)}`")
                 with open(path, "rb") as f:
                     st.download_button(
-                        label="⬇️ Download PDF",
+                        label="⬇Download PDF",
                         data=f,
                         file_name=os.path.basename(path),
                         mime="application/pdf",
@@ -97,7 +97,7 @@ def render():
             else:
                 st.error("Failed to generate report. Check logs.")
 
-    # ── PREVIEW DATA ──────────────────────────────────────────────────────────
+    # PREVIEW DATA
     with tab_prev:
         st.subheader("Preview Report Data")
         c1, c2, c3 = st.columns([2, 1, 1])
@@ -126,7 +126,7 @@ def render():
         col_a, col_b = st.columns(2)
 
         with col_a:
-            st.markdown("**📅 Attendance**")
+            st.markdown("**Attendance**")
             st.write(
                 f"- Total sessions: **{att2['total']}**\n"
                 f"- Attended: **{att2['attended']}**\n"
@@ -135,37 +135,37 @@ def render():
             )
 
         with col_b:
-            st.markdown("**📝 Test Summary**")
+            st.markdown("**Test Summary**")
             st.write(
                 f"- Tests conducted: **{ts2['count']}**\n"
                 f"- Average score: **{ts2['avg_pct']}%**"
             )
 
         if lessons:
-            st.markdown("**📖 Lesson Log**")
+            st.markdown("**Lesson Log**")
             st.dataframe(pd.DataFrame(lessons), hide_index=True, use_container_width=True)
         else:
             st.info("No lesson logs for this period.")
 
         if ts2["tests"]:
-            st.markdown("**🏆 Test Results**")
+            st.markdown("**Test Results**")
             st.dataframe(pd.DataFrame(ts2["tests"]), hide_index=True, use_container_width=True)
 
     # ── HISTORY ───────────────────────────────────────────────────────────────
     with tab_hist:
-        st.subheader("📁 Generated Reports")
+        st.subheader("Generated Reports")
         reports = list_generated_reports()
         if not reports:
             st.info("No reports generated yet.")
         else:
             for r in reports:
                 col1, col2, col3, col4 = st.columns([3, 1.5, 1, 1])
-                col1.markdown(f"📄 **{r['filename']}**")
+                col1.markdown(f"**{r['filename']}**")
                 col2.caption(r["modified"])
                 col3.caption(f"{r['size_kb']} KB")
                 with open(r["path"], "rb") as f:
                     col4.download_button(
-                        "⬇️",
+                        "⬇:DOWNLOAD",
                         data=f,
                         file_name=r["filename"],
                         mime="application/pdf",
