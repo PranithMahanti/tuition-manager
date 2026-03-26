@@ -197,6 +197,64 @@ The browser will open automatically at `http://localhost:8501`. On the first run
 
 ---
 
+## Running the Application
+
+Two launcher scripts are provided, one for Linux and macOS (`run.sh`) and one for Windows (`run.bat`). Both do the same work in the same order. After the first run, subsequent launches skip the setup steps that are already complete and start in a few seconds.
+
+### Linux and macOS
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+### Windows
+
+Double-click `run.bat`, or run it from a terminal:
+
+```
+run.bat
+```
+
+### What the scripts do
+
+Both scripts perform the following steps before starting the application.
+
+**Check Python** : Verifies that Python 3.10 or later is installed and available. If Python is missing or the version is too old, the script exits immediately with a message explaining what to install and where to get it, rather than failing later with a cryptic import error.
+
+**Create the virtual environment** : Creates a `venv/` directory in the project root using the system Python. If `venv/` already exists the step is skipped entirely.
+
+**Upgrade pip** : Ensures the package installer inside the virtual environment is current. A stale pip can cause package installs to fail silently on newer Python versions.
+
+**Install missing packages** : Checks each required package individually by attempting to import it. Only the packages that are not already installed are downloaded. On the first run this installs streamlit, sqlalchemy, pandas, reportlab, and plotly. On every subsequent run this step completes in under a second.
+
+**Create required directories** : Creates the `data/` and `reports/` directories if they do not exist. The application writes the SQLite database into `data/` and saves generated PDF reports into `reports/`. Without these directories the application would error on first launch.
+
+**Start the application** : Launches Streamlit using the virtual environment's own executable and opens the application at `http://localhost:8501`. Press `Ctrl+C` in the terminal window to stop the server.
+
+### Prerequisites
+
+The only thing that needs to be installed manually before using the launcher scripts is Python 3.10 or later.
+
+On Linux and macOS, Python is typically available through the system package manager:
+
+```bash
+# Ubuntu / Debian
+sudo apt install python3 python3-venv
+
+# Arch / Arch-based distros
+sudo pacman -Syu python python-pip python-virtualenv
+
+# macOS with Homebrew
+brew install python
+```
+
+On Windows, download the installer from `https://www.python.org/downloads/` and make sure to check the option that says "Add Python to PATH" during installation. Without that option the launcher script will not be able to find Python.
+
+Everything else, like the virtual environment, all Python packages, and the required directories, is handled automatically by the launcher.
+
+---
+
 ## Usage Guide
 
 The recommended workflow for a new setup follows this order.
@@ -291,4 +349,4 @@ MIT License. See `LICENSE` for details.
 
 ## Acknowledgements
 
-Built for my mother, who has been teaching students patiently for longer than I have been writing code.
+Built for my mother, who has been teaching for a loooong time.
