@@ -79,26 +79,28 @@ echo  pip is up to date.
 echo.
 echo [4/5] Checking required packages...
 
-set MISSING=
-for %%p in (%PACKAGES%) do (
-    "%VENV_PYTHON%" -c "import %%p" >nul 2>&1
-    if errorlevel 1 (
-        set MISSING=!MISSING! %%p
-    )
-)
+@REM set MISSING=
+@REM for %%p in (%PACKAGES%) do (
+@REM     "%VENV_PYTHON%" -c "import %%p" >nul 2>&1
+@REM     if errorlevel 1 (
+@REM         set MISSING=!MISSING! %%p
+@REM     )
+@REM )
 
-if "!MISSING!"=="" (
-    echo  All packages already installed.
-) else (
-    echo  Installing:!MISSING!
-    "%VENV_PIP%" install !MISSING! --quiet
-    if errorlevel 1 (
-        echo  ERROR: Package installation failed.
-        pause
-        exit /b 1
-    )
-    echo  Packages installed.
-)
+@REM if "!MISSING!"=="" (
+@REM     echo  All packages already installed.
+@REM ) else (
+@REM     echo  Installing:!MISSING!
+@REM     "%VENV_PIP%" install !MISSING! --quiet
+@REM     if errorlevel 1 (
+@REM         echo  ERROR: Package installation failed.
+@REM         pause
+@REM         exit /b 1
+@REM     )
+@REM     echo  Packages installed.
+@REM )
+
+"%VENV_PIP%" install -r requirements.txt 
 
 :: Create missing Directories
 echo.
