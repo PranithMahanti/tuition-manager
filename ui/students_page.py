@@ -18,7 +18,7 @@ def render():
 
     # LIST
     with tab_list:
-        students = get_all_students(active_only=False)
+        students = get_all_students(active_only=True)
         if not students:
             st.info("No students yet. Use the 'Add Student' tab to get started.")
         else:
@@ -36,6 +36,7 @@ def render():
                 }
                 for s in students
             ]
+            rows = [row for row in rows if row["Active"]=="Active"]
             df = pd.DataFrame(rows)
 
             search = st.text_input("Search by name or subject", "")
